@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Dosis&family=Roboto&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* | Variable */
+:root {
+    /* Color Variable */
+    --background: #1e1e1e;
+    --font-color: whitesmoke;
+    --button-background-color: #007acc;
+    
+    /* Font Family Variable */
+    --font-family: Roboto;
+
+    /* Font Size Variable*/
+}
+
+body {
+    font-family: var(--font-family);
+}
+
+/* | Utility Class */
+
+/* || Flex Box */
+.flex-box {
+    display: flex;
+}
+
+.flex-box--horizontal {
+    flex-direction: column;
+}
+
+.flex-box--gap-small {
+    gap: 1rem;
+}
+
+.flex-box--gap-very-small {
+    gap: 0.5rem;
+}
+
+.flex-box__grow {
+    flex-grow: 1;
+}
+
+/* || Grid Box */
+.grid-box {
+    display: grid;
+}
+
+.grid-box--gap-small {
+    gap: 1rem;
+}
+
+/* || Button */
+.button {
+    border-radius: 10px;
+    padding: 5px;
+    border: 0;
+}
+
+.button:hover {
+    cursor: pointer;
+}
+
+/* || Header */
+.header {
+    background-color: var(--background);
+    color: var(--font-color);
+    padding: 10px 30vw;
+    width: 100vw;
+}
+
+.route__content {
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+}
+
+.route__input {
+    border-radius: 10px;
+    border: 0;
+    padding: 5px;
+}
+
+.route__button {
+    background-color: var(--button-background-color);
+    color: var(--font-color);
+    margin: 5px 15vw;
+}
+
+.route__button:hover {
+    background-color: var(--font-color);
+    color: var(--button-background-color);
+}
