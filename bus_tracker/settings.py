@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'maps',
-    'common'
+    'common',
+    'livereload'
 ]
 
 MIDDLEWARE = [

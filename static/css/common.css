@@ -70,7 +70,7 @@ body {
 .header {
     background-color: var(--background);
     color: var(--font-color);
-    padding: 10px 30vw;
+    padding: 10px;
     width: 100vw;
 }
 
@@ -94,4 +94,10 @@ body {
 .route__button:hover {
     background-color: var(--font-color);
     color: var(--button-background-color);
+}
+
+@media only screen and (min-width:  992px) {
+    .header {
+        padding: 10px 30vw;
+    }
 }
