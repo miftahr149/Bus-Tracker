@@ -2,28 +2,30 @@
 {% load static %}
 
 {% block content %}
+
 <link rel="stylesheet" href="{% static 'css/maps.css' %}">
 
-<header class="header">
-    <form action="" class="route flex-box flex-box--horizontal flex-box--gap-very-small">
-        <!-- Current Place -->
-        <div class="grid-box route__content">
-            <label for="current_place" class="route__label">Current Place: </label>
-            <input name="current_place" type="text" class="route__input">
-        </div>
 
-        <!-- Destination -->
-        <div class="grid-box route__content">
-            <label for="destination" class="route__label">Destination: </label>
-            <input name='destination' type="text" class="route__input">
-        </div>
+<main class="flex-box flex-box__grow flex-box--vertical">
+    <section class="maps-routes flex-box__grow">
+        <form id='maps-routes' action="" class="route flex-box flex-box--vertical flex-box--gap-very-small">
+            <!-- Current Place -->
+            <div class="grid-box route__content">
+                <label for="current_place" class="route__label">Current Place: </label>
+                <input name="current_place" type="text" class="route__input">
+            </div>
+    
+            <!-- Destination -->
+            <div class="grid-box route__content">
+                <label for="destination" class="route__label">Destination: </label>
+                <input name='destination' type="text" class="route__input">
+            </div>
+    
+            <input type="submit" value="Get Route" class="route__button button">
+        </form>
+    </section>
 
-        <input type="submit" value="Get Route" class="route__button button">
-    </form>
-</header>
-
-<main class="grid-box flex-box__grow">
-    <div id="map" style="width: 100vw;"></div>
+    <section id="map" class="map-display flex-box__grow"></section>
 </main>
 
 <script src="{% static 'js/maps.js' %}"></script>

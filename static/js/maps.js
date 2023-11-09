@@ -1,5 +1,5 @@
 const mapElement = document.getElementById('map');
-const HeaderElement = document.querySelector('.header');
+const routeElement = document.getElementById('maps-routes');
 
 function initMap() {
     let map = new google.maps.Map(mapElement, {
@@ -11,16 +11,12 @@ function initMap() {
     });
 }
 
-const configureMapElement = () => {
-    height = screen.height - HeaderElement.clientHeight - 50;
-    width = screen.width - 50;
-
-    console.log(`${HeaderElement.clientWidth}`)
-
-    mapElement.style.height = `${85 / 100 * height}px`;
+const configureMap = () => {
+    let height = window.innerHeight - routeElement.offsetHeight;
+    mapElement.style.height = `${0.95 * height}px`;
 }
 
-configureMapElement();
+configureMap();
 window.addEventListener('resize', () => {
-    configureMapElement()
-});
+    configureMap();
+})

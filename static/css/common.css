@@ -21,6 +21,7 @@
 
 body {
     font-family: var(--font-family);
+    min-height: 100vh;
 }
 
 /* | Utility Class */
@@ -30,7 +31,7 @@ body {
     display: flex;
 }
 
-.flex-box--horizontal {
+.flex-box--vertical {
     flex-direction: column;
 }
 
@@ -64,40 +65,4 @@ body {
 
 .button:hover {
     cursor: pointer;
-}
-
-/* || Header */
-.header {
-    background-color: var(--background);
-    color: var(--font-color);
-    padding: 10px;
-    width: 100vw;
-}
-
-.route__content {
-    grid-template-columns: repeat(2, 1fr);
-    align-items: center;
-}
-
-.route__input {
-    border-radius: 10px;
-    border: 0;
-    padding: 5px;
-}
-
-.route__button {
-    background-color: var(--button-background-color);
-    color: var(--font-color);
-    margin: 5px 15vw;
-}
-
-.route__button:hover {
-    background-color: var(--font-color);
-    color: var(--button-background-color);
-}
-
-@media only screen and (min-width:  600px) {
-    .header {
-        padding: 10px 30vw;
-    }
 }
