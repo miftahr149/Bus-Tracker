@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'livereload',
 
-    'base.apps.BaseConfig'
+    'base.apps.BaseConfig',
 ]
 
 MIDDLEWARE = [
@@ -131,3 +131,5 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoibWlmdGFocjEiLCJhIjoiY2xveG13OGJrMWNlaTJ1b3Z1and2cWk0ZiJ9.lo4SPM3BjPABYSaj65Ku5w'

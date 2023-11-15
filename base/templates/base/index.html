@@ -1,34 +1,53 @@
-{% extends 'main.html' %}
-{% load static %}
+{% extends 'main.html' %} {% load static %} {% block content %}
 
-{% block content %}
-
-<link rel="stylesheet" href="{% static 'css/maps.css' %}">
-
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+<link
+  href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css"
+  rel="stylesheet"
+/>
 
 <main class="flex-box flex-box__grow flex-box--vertical">
-    <section class="maps-routes flex-box__grow">
-        <form id='maps-routes' action="" class="route flex-box flex-box--vertical flex-box--gap-very-small">
-            <!-- Current Place -->
-            <div class="grid-box route__content">
-                <label for="current_place" class="route__label">Current Place: </label>
-                <input name="current_place" type="text" class="route__input">
-            </div>
-    
-            <!-- Destination -->
-            <div class="grid-box route__content">
-                <label for="destination" class="route__label">Destination: </label>
-                <input name='destination' type="text" class="route__input">
-            </div>
-    
-            <input type="submit" value="Get Route" class="route__button button">
-        </form>
-    </section>
+  <section class="maps-routes flex-box__grow">
+    <form
+      id="maps-routes"
+      action=""
+      class="route flex-box flex-box--vertical flex-box--gap-very-small"
+    >
+      <!-- Current Place -->
+      <div class="grid-box route__content">
+        <label for="current_place" class="route__label">Current Place: </label>
+        <input name="current_place" type="text" class="route__input" />
+      </div>
 
-    <section id="map" class="map-display flex-box__grow"></section>
+      <!-- Destination -->
+      <div class="grid-box route__content">
+        <label for="destination" class="route__label">Destination: </label>
+        <input name="destination" type="text" class="route__input" />
+      </div>
+
+      <input type="submit" value="Get Route" class="route__button button" />
+    </form>
+  </section>
+
+  <section id="map" style="min-height: 70vh"></section>
 </main>
 
+<script>
+  mapboxgl.accessToken = "{{mapbox_access_token}}";
+
+  arked_meranti_location = [
+    parseFloat("{{arked_meranti_lat}}"),
+    parseFloat("{{arked_meranti_long}}"),
+  ];
+
+  let map = new mapboxgl.Map({
+    container: "map",
+    style: "mapbox://style/mapbox/streets-v12",
+    center: arked_meranti_location,
+    zoom: 18,
+  });
+</script>
+
 <script src="{% static 'js/maps.js' %}"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDNbxMEjqRr9jk3IFmP9gKBs2-NDWCwwmE&callback=initMap"></script>
 
 {% endblock %}

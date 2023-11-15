@@ -7,6 +7,10 @@ name = "pypi"
 django = "*"
 django-debug-toolbar = "*"
 livereload = "*"
+mapboxgl = "*"
+geopandas = "*"
+geopy = "*"
+geocoder = "*"
 
 [dev-packages]
 
