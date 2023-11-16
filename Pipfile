@@ -11,6 +11,8 @@ mapboxgl = "*"
 geopandas = "*"
 geopy = "*"
 geocoder = "*"
+requests = "*"
+folium = "*"
 
 [dev-packages]
 
