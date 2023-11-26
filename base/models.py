@@ -55,8 +55,8 @@ class BusRoute(models.Model):
 
 
 class OperationHour(models.Model):
-    start = models.TimeField(null=True, blank=True)
-    end = models.TimeField(null=True, blank=True)
+    start = models.TimeField(blank=True, null=True)
+    end = models.TimeField(blank=True, null=True)
 
     def __str__(self):
         start = None
@@ -71,19 +71,20 @@ class OperationHour(models.Model):
         return f'{start} - {end}'
 
 
-class OperationHourBus(models.Model):
-    for_bus = models.CharField(max_length=3, null=True)
-    bus_operation_hour = models.ManyToManyField(OperationHour)
+class BusOperationHour(models.Model):
+    for_bus = models.CharField(max_length=3)
+    operation_hour_rel = models.ManyToManyField(OperationHour)
 
     def __str__(self) -> str:
-        return str(self.bus_name)
-
+        return self.for_bus
 
 class BusInfo(models.Model):
     name = models.CharField(max_length=3)
-    bus_route = models.ForeignKey(BusRoute, on_delete=models.CASCADE)
-    operation_hour = models.ForeignKey(
-        OperationHourBus, on_delete=models.CASCADE, null=True)
+    bus_route = models.ForeignKey(
+        BusRoute, on_delete=models.CASCADE)
+    bus_operation_hour = models.ForeignKey(
+        BusOperationHour, on_delete=models.CASCADE,
+        blank=True, null=True)
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     weekend = models.BooleanField(default=False)

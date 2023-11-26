@@ -1,6 +1,11 @@
 {% extends 'project_dummy/main.html' %} {% load static %} {% block content %}
 
 <main>
+  {% for route in test %}
+
+  <li> {{route}} </li>
+
+  {% endfor %}
 </main>
 
 {% endblock %}

@@ -5,13 +5,12 @@ from . import models
 
 # Create your views here.
 def get_test_view(request: HttpRequest) -> HttpResponse:
-    test = base_models.BusInfo.objects.get(name="A1")
-    test = test.OperationHourBus
+    test = base_models.BusRoute.objects.all()
 
     print(test)
     
     context = {
-        'bus_route': test
+        'test': test
     }
 
     return render(request, 'project_dummy/index.html', context)
