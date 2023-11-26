@@ -7,7 +7,7 @@
 />
 
 <main class="flex-box flex-box__grow flex-box--vertical">
-  <section class="maps-routes flex-box__grow">
+  <section class="maps-routes">
     <form
       id="maps-routes"
       action="{% url 'route' %}"
@@ -35,7 +35,7 @@
     </form>
   </section>
 
-  <section id="map" style="height: 80vh"></section>
+  <section id="map" style="flex-grow: 9"></section>
 </main>
 
 {% include 'base/mapsjs.html' %}

@@ -6,13 +6,13 @@ name = "pypi"
 [packages]
 django = "*"
 django-debug-toolbar = "*"
-livereload = "*"
 mapboxgl = "*"
 geopandas = "*"
 geopy = "*"
 geocoder = "*"
 requests = "*"
 folium = "*"
+django-livereload-server = "*"
 
 [dev-packages]
 
