@@ -29,15 +29,18 @@ class Address(models.Model):
 
 
 class StartRoute(models.Model):
-    for_bus_route = models.CharField(max_length=3)
+    for_bus_route = models.CharField(max_length=20)
     route = models.ManyToManyField(Address)
+
+    class Meta:
+        ordering = ['for_bus_route']
 
     def __str__(self) -> str:
         return self.for_bus_route
 
 
 class EndRoute(models.Model):
-    for_bus_route = models.CharField(max_length=3)
+    for_bus_route = models.CharField(max_length=20)
     route = models.ManyToManyField(Address)
 
     def __str__(self) -> str:
@@ -45,7 +48,7 @@ class EndRoute(models.Model):
 
 
 class BusRoute(models.Model):
-    type_bus = models.CharField(max_length=3)
+    type_bus = models.CharField(max_length=20)
     route_start = models.ForeignKey(
         StartRoute, on_delete=models.CASCADE, null=True)
     round_end = models.ForeignKey(
@@ -79,13 +82,16 @@ class OperationHour(models.Model):
 
 
 class BusInfo(models.Model):
-    name = models.CharField(max_length=3)
+    name = models.CharField(max_length=20)
     bus_route = models.ForeignKey(
         BusRoute, on_delete=models.CASCADE)
     operation_hour = models.ManyToManyField(OperationHour)
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     weekend = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['name']
 
     def __str__(self):
         return self.name

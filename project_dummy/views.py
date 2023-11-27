@@ -5,25 +5,35 @@ from . import models
 
 # Create your views here.
 def get_test_view(request: HttpRequest) -> HttpResponse:
-    test = base_models.BusInfo.objects.get(name='A2')
-    test = test.operation_hour.all()
+    bus_info_list = base_models.BusInfo.objects.all()
 
-    print(test)
+    print(bus_info_list)
+
+    def create_test_context() -> list:
+        result = []
+
+        for bus_info in bus_info_list:
+            bus_operation_hour_id = bus_info.operation_hour.id
+
+            result.append({
+                'name': bus_info.name,
+            })
+
+        return result
     
     context = {
-        'test': test
+        'bus_info_list': bus_info_list
     }
 
     return render(request, 'project_dummy/index.html', context)
 
-def get_song_list_view(
-    request: HttpRequest, 
-    pk: str) -> HttpResponse:
-
-    list_song = models.ListSong.objects.get(id=int(pk))
+def get_test2_view(request: HttpRequest, bus_name: str) -> HttpResponse:
+    bus_info = base_models.BusInfo.objects.get(name=bus_name)
+    operation_hour = bus_info.operation_hour.all() 
 
     context = {
-        'list_song': list_song.list_song.all()
+        'name': bus_name,
+        'operation_hour': operation_hour
     }
 
-    return render(request, 'project_dummy/song_list.html', context)
+    return render(request, 'project_dummy/test2.html', context)
