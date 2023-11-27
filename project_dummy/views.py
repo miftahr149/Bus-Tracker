@@ -5,7 +5,8 @@ from . import models
 
 # Create your views here.
 def get_test_view(request: HttpRequest) -> HttpResponse:
-    test = base_models.BusRoute.objects.all()
+    test = base_models.BusInfo.objects.get(name='A2')
+    test = test.operation_hour.all()
 
     print(test)
     
