@@ -35,8 +35,21 @@ class PointerAddress(models.Model):
     position = models.BigIntegerField(default=0)
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ['for_bus_route', 'position']
+
     def __str__(self) -> str:
-        return f'({self.for_bus_route}) {str(self.address)}'
+        return f'({self.for_bus_route} - {self.position}) {str(self.address)}'
+    
+    def save(self, *args, **kwargs):
+
+        if self.position != 0: 
+            return super(PointerAddress, self).save(*args, **kwargs)
+        
+        _filter = PointerAddress.objects.filter(for_bus_route=self.for_bus_route)
+        route_length = len(_filter)
+        self.position = route_length + 1
+        return super(PointerAddress, self).save(*args, **kwargs)
 
 
 class BusRoute(models.Model):
