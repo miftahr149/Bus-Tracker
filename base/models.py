@@ -15,6 +15,9 @@ class Address(models.Model):
     long = models.FloatField(blank=True, null=True)
     get_latlong = models.BooleanField(
         default=False, verbose_name="Automatic Get Address")
+    
+    class Meta:
+        ordering = ['name']
 
     def save(self, *args, **kwargs):
         if not self.get_latlong:
@@ -27,32 +30,21 @@ class Address(models.Model):
     def __str__(self):
         return self.name
 
-
-class StartRoute(models.Model):
+class PointerAddress(models.Model):
     for_bus_route = models.CharField(max_length=20)
-    route = models.ManyToManyField(Address)
-
-    class Meta:
-        ordering = ['for_bus_route']
+    position = models.BigIntegerField(default=0)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return self.for_bus_route
-
-
-class EndRoute(models.Model):
-    for_bus_route = models.CharField(max_length=20)
-    route = models.ManyToManyField(Address)
-
-    def __str__(self) -> str:
-        return self.for_bus_route
+        return f'({self.for_bus_route}) {str(self.address)}'
 
 
 class BusRoute(models.Model):
     type_bus = models.CharField(max_length=20)
-    route_start = models.ForeignKey(
-        StartRoute, on_delete=models.CASCADE, null=True)
-    round_end = models.ForeignKey(
-        EndRoute, on_delete=models.CASCADE, null=True)
+    route = models.ManyToManyField(PointerAddress)
+
+    class Meta:
+        ordering = ['type_bus']
 
     def __str__(self):
         return self.type_bus
