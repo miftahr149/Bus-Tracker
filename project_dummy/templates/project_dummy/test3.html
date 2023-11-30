@@ -1,0 +1,35 @@
+{% load static %}
+
+<style>
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  .test {
+    min-height: 100vh
+  }
+</style>
+
+<div class="test">
+
+</div>
+
+<script>
+  const testContainer = document.querySelector('.test');
+
+  const fetchDataFunction = (data) => {
+    for (let keys in data) {
+      let newElement = document.createElement('div');
+      let lat = data[keys].lat
+      let long = data[keys].long
+      newElement.textContent = `${keys} (lat: ${lat} long: ${long})`;
+      testContainer.appendChild(newElement);
+    }
+  } 
+
+  fetch("{% url 'api_address' %}")
+    .then((response) => response.json())
+    .then(fetchDataFunction);
+</script>

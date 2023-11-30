@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
     'project_dummy.apps.ProjectDummyConfig',
     'base.apps.BaseConfig',
+    'api.apps.ApiConfig'
 ]
 
 MIDDLEWARE = [
