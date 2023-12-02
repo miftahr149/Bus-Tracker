@@ -35,16 +35,16 @@
   const mapbox_access_token = "{{mapbox_access_token}}";
   mapboxgl.accessToken = mapbox_access_token;
 
+  async function fetchFunction(url) {
+    return await fetch(url).then(response => response.json())
+  }
+
   async function fetchAddress() {
-    let response = await fetch("{% url 'api_address' %}");
-    let data = await response.json();
-    return data;
+    return await fetchFunction("{% url 'api_address' %}");
   }
 
   async function fetchRoute() {
-    let response = await fetch("{% url 'api_route_all' %}");
-    let data = await response.json()
-    return data;
+    return await fetchFunction("{% url 'api_route_all' %}");
   }
 </script>
 

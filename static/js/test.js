@@ -1,5 +1,3 @@
-let userPosition;
-
 const createPointGeoJsonFeature = (addressData) => {
   let lat = addressData.latLng.lat;
   let long = addressData.latLng.long

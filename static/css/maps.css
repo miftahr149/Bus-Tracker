@@ -2,7 +2,7 @@
     background-color: var(--background);
     color: var(--font-color);
     padding: 10px 10vw;
-    flex-grow: 2;
+    flex-grow: 0.1;
     width: 100vw;
 }
 
@@ -37,7 +37,6 @@
 @media only screen and (min-width:  768px) {
     .maps-routes {
         padding: 10px 30vw;
-        flex-grow: 0.1;
     }
 
     .route__button {

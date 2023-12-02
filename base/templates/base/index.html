@@ -1,43 +1,55 @@
 {% extends 'main.html' %} {% load static %} {% block content %}
 
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+<script src="https://unpkg.com/@turf/turf/turf.min.js"></script>
 <link
   href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css"
   rel="stylesheet"
 />
+<link rel="stylesheet" href="{% static 'css/maps.css' %}" />
 
 <main class="flex-box flex-box__grow flex-box--vertical">
-  <section class="maps-routes">
-    <form
-      id="maps-routes"
-      action="{% url 'route' %}"
-      class="route flex-box flex-box--vertical flex-box--gap-very-small"
-      method="get"
-    >
-      <!-- Current Place -->
-      <div class="grid-box route__content">
-        <label for="current_place" class="route__label">Current Place: </label>
-        <input
-          id="current_place"
-          name="current_place"
-          type="text"
-          class="route__input"
-        />
-      </div>
+  <section class="maps-routes flex-box flex-box--vertical flex-box--gap-small">
+    <!-- Current Place -->
+    <div class="grid-box route__content">
+      <label for="current_place" class="route__label">Current Place: </label>
+      <input
+        id="current_place"
+        name="current_place"
+        type="text"
+        class="route__input"
+      />
+    </div>
 
-      <!-- Destination -->
-      <div class="grid-box route__content">
-        <label for="destination" class="route__label">Destination: </label>
-        <input name="destination" type="text" class="route__input" />
-      </div>
+    <!-- Destination -->
+    <div class="grid-box route__content">
+      <label for="destination" class="route__label">Destination: </label>
+      <input id='destination' name="destination" type="text" class="route__input" />
+    </div>
 
-      <input type="submit" value="Get Route" class="route__button button" />
-    </form>
+    <button type="button" class="button route__button">Find Route</button>
   </section>
 
   <section id="map" style="flex-grow: 9"></section>
 </main>
 
-{% include 'base/mapsjs.html' %}
+<script>
+  const accessToken = "{{mapbox_access_token}}";
+  mapboxgl.accessToken = accessToken;
+
+  async function fetchFunction(url) {
+    return await fetch(url).then((response) => response.json());
+  }
+
+  async function fetchAddress() {
+    return await fetchFunction("{% url 'api_address' %}");
+  }
+
+  async function fetchRoute() {
+    return await fetchFunction("{% url 'api_route_all' %}");
+  }
+</script>
+
+<script src="{% static 'js/maps.js' %}"></script>
 
 {% endblock %}
