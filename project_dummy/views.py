@@ -17,13 +17,9 @@ def get_test_view(request: HttpRequest) -> HttpResponse:
 
     return render(request, 'project_dummy/index.html', context)
 
-def get_test2_view(request: HttpRequest, bus_name: str) -> HttpResponse:
-    bus_info = base_models.BusInfo.objects.get(name=bus_name)
-    operation_hour = bus_info.operation_hour.all() 
-
+def get_test2_view(request: HttpRequest) -> HttpResponse:
     context = {
-        'name': bus_name,
-        'operation_hour': operation_hour
+        
     }
 
     return render(request, 'project_dummy/test2.html', context)
