@@ -1,0 +1,23 @@
+<script>
+  async function testFunction() {
+    let response = await fetch("{% url 'api_address' %}");
+    const addressData = await response.json();
+    return addressData;
+  }
+  
+  async function testFunction2() {
+    let response = await fetch("{% url 'api_route_all' %}");
+    const routeData = await response.json()
+    return routeData
+  }
+
+  async function mainFunction() {
+    let address = await testFunction();
+    let route = await testFunction();
+
+    console.log(address);
+    console.log(route)
+  }
+
+  mainFunction();
+</script>

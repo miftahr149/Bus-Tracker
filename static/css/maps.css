@@ -2,6 +2,7 @@
     background-color: var(--background);
     color: var(--font-color);
     padding: 10px 10vw;
+    flex-grow: 0.1;
     width: 100vw;
 }
 
@@ -28,6 +29,7 @@
 }
 
 .map-display {
+    flex-grow: 9;
     width: 100%;
 }
 

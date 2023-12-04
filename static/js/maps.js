@@ -24,6 +24,7 @@ const addMarker = (addressList, map) => {
   });
 };
 
+<<<<<<< HEAD
 const getNearestBusStop = (addressList) => {
   const createBusStopList = () => {
     result = [];
@@ -45,6 +46,22 @@ const getNearestBusStop = (addressList) => {
   busStopList.forEach(busStop => {
     const distance = turd.distance(user)
   })
+=======
+function createSubmitFunction(currentPlace, destination) {
+  const urlFactory = (address) => {
+    return `https://api.mapbox.com/geocoding/v5/mapbox.place/"${address}.json?accessToken=${accessToken}"`;
+  };
+  
+  const getCoordinates = async (address) => {
+    const url = urlFactory(address)
+    return await fetchFunction(url);
+  };
+
+  return async () => {
+    let currentPlaceUrl = urlFactory(currentPlace.values);
+    let destinationUrl = urlFactory(destination.value);
+  };
+>>>>>>> main
 }
 
 async function mainFunction() {
@@ -72,8 +89,11 @@ async function mainFunction() {
         position.coords.latitude,
       ];
 
+<<<<<<< HEAD
       map.flyTo({ center: userPosition });
 
+=======
+>>>>>>> main
       const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${userPosition[0]},${userPosition[1]}.json?access_token=${accessToken}`;
 
       const apiData = await fetch(url).then((response) => response.json());
@@ -97,7 +117,11 @@ async function mainFunction() {
   const routeButton = document.querySelector(".route__button");
   routeButton.addEventListener(
     "click",
+<<<<<<< HEAD
     createSubmitFunction(currentPlace, destination, map)
+=======
+    await createSubmitFunction(currentPlace, destination)
+>>>>>>> main
   );
 }
 

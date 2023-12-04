@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.conf import settings
 from django.views.generic.edit import CreateView
-from .models import Address
+from . import models
 import geocoder
 import requests
 from . import utility
@@ -11,8 +11,7 @@ from . import utility
 mapbox_access_token = settings.MAPBOX_ACCESS_TOKEN
 
 def get_index_view(request: HttpRequest, addition_context: dict=None) -> HttpResponse:
-    arked_meranti = Address.objects.get(name="Arked Meranti")
-
+    arked_meranti = models.Address.objects.get(name="Arked Meranti")
     context = {
         'mapbox_access_token': mapbox_access_token,
         'arked_meranti_location': arked_meranti
@@ -41,7 +40,4 @@ def get_route(request: HttpRequest) -> HttpResponse:
     }
 
     return get_index_view(request, context)
-
-def get_test(request: HttpRequest) -> HttpResponse:
-    return render(request, 'base/test.html')
     

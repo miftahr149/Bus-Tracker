@@ -1,0 +1,22 @@
+<script>
+    console.log('hello world')
+    accessToken = "{{mapbox_access_token}}";
+    mapboxgl.accessToken = accessToken
+
+    const createGeoJSONFeatures = (attribute) => {
+        result = {
+            'type': 'Features',
+            'geometry': {
+                'type': attribute.type,
+                'coordinates': attribute.coordinates
+            },
+            'properties': {}
+        }
+
+        if (attribute.properties) {
+            result.properties = attribute.properties
+        }   
+        
+        return result;
+    }
+</script>

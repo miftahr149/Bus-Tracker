@@ -1,91 +1,52 @@
 {% extends 'main.html' %} {% load static %} {% block content %}
 
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+<script src="https://unpkg.com/@turf/turf/turf.min.js"></script>
 <link
   href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css"
   rel="stylesheet"
 />
+<link rel="stylesheet" href="{% static 'css/maps.css' %}" />
 
 <main class="flex-box flex-box__grow flex-box--vertical">
-  <section class="maps-routes flex-box__grow">
-    <form
-      id="maps-routes"
-      action="{% url 'route' %}"
-      class="route flex-box flex-box--vertical flex-box--gap-very-small"
-      method="get"
-    >
-      <!-- Current Place -->
-      <div class="grid-box route__content">
-        <label for="current_place" class="route__label">Current Place: </label>
-        <input
-          id="current_place"
-          name="current_place"
-          type="text"
-          class="route__input"
-        />
-      </div>
+  <section class="maps-routes flex-box flex-box--vertical flex-box--gap-small">
+    <!-- Current Place -->
+    <div class="grid-box route__content">
+      <label for="current_place" class="route__label">Current Place: </label>
+      <input
+        id="current_place"
+        name="current_place"
+        type="text"
+        class="route__input"
+      />
+    </div>
 
-      <!-- Destination -->
-      <div class="grid-box route__content">
-        <label for="destination" class="route__label">Destination: </label>
-        <input name="destination" type="text" class="route__input" />
-      </div>
+    <!-- Destination -->
+    <div class="grid-box route__content">
+      <label for="destination" class="route__label">Destination: </label>
+      <input id='destination' name="destination" type="text" class="route__input" />
+    </div>
 
-      <input type="submit" value="Get Route" class="route__button button" />
-    </form>
+    <button type="button" class="button route__button">Find Route</button>
   </section>
 
-  <section id="map" style="height: 80vh"></section>
+  <section id="map" style="flex-grow: 9"></section>
 </main>
 
-{% if operation == 'route' %}
 <script>
-  console.log('hi')
-  started_location = [
-    parseFloat('{{current_place.1}}'),
-    parseFloat('{{current_place.0}}')
-  ]
-</script>
-
-{% else %}
-<script>
-  console.log('hola')
-  started_location = [
-    parseFloat('{{arked_meranti_location.lat}}'),
-    parseFloat('{{arked_meranti_location.long}}')
-  ]
-</script>
-
-{% endif %}
-
-<script>
-  let accessToken = "{{mapbox_access_token}}";
+  const accessToken = "{{mapbox_access_token}}";
   mapboxgl.accessToken = accessToken;
-  let current_place = document.getElementById("current_place");
 
-  /* Render mapbox */
+  async function fetchFunction(url) {
+    return await fetch(url).then((response) => response.json());
+  }
 
-  let map = new mapboxgl.Map({
-    container: "map",
-    style: "mapbox://style/mapbox/streets-v12",
-    center: started_location,
-    zoom: 18,
-  });
+  async function fetchAddress() {
+    return await fetchFunction("{% url 'api_address' %}");
+  }
 
-  /* get user current location */
-  if ("geolocation" in navigator) {
-    navigator.geolocation.getCurrentPosition((position) => {
-      let lattitude = position.coords.latitude;
-      let longitude = position.coords.longitude;
-      let apiUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${lattitude}.json?access_token=${accessToken}`;
-
-      fetch(apiUrl)
-        .then((response) => response.json())
-        .then((data) => {
-          let address = data.features[0].place_name;
-          current_place.value = address;
-        });
-    });
+  async function fetchRoute() {
+    return await fetchFunction("{% url 'api_route_all' %}");
   }
 
   async function fetchGeocoding(address) {
@@ -93,6 +54,7 @@
   }
 </script>
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 {% if operation == 'route' %}
 <script>
@@ -104,47 +66,8 @@
 <script src="{% static 'js/buttonFunction.js' %}"></script>
 <script src="{% static 'js/maps.js' %}"></script>
 >>>>>>> Stashed changes
+=======
+<script src="{% static 'js/maps.js' %}"></script>
+>>>>>>> main
 
-  destination = [
-    parseFloat("{{ destination.0 }}"),
-    parseFloat("{{ destination.1 }}"),
-  ];
-
-  console.log(current_place, destination)
-
-  apiurl = `https://api.mapbox.com/directions/v5/mapbox/driving/${current_place[1]},${current_place[0]};${destination[1]},${destination[0]}?geometries=geojson&access_token=${accessToken}`;
-
-  fetch(apiurl)
-    .then((response) => response.json())
-    .then((data) => {
-      let route = data.routes[0].geometry;
-      console.log(route);
-      map.on("load", () => {
-        map.addLayer({
-          id: "route",
-          type: "line",
-          source: {
-            type: "geojson",
-            data: {
-              type: "Feature",
-              properties: {},
-              geometry: {
-                type: "LineString",
-                coordinates: route.coordinates,
-              },
-            },
-          },
-          layout: {
-            "line-join": "round",
-            "line-cap": "round",
-          },
-          paint: {
-            "line-color": "#3887be",
-            "line-width": 5,
-            "line-opacity": 0.8,
-          },
-        });
-      });
-    });
-</script>
-{% endif %} {% endblock %}
+{% endblock %}

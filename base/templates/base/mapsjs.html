@@ -1,0 +1,97 @@
+{% include 'base/utilitymapsjs.html' %}
+{% if operation == 'route' %}
+
+<script>
+  started_location = [
+    parseFloat('{{current_place.1}}'),
+    parseFloat('{{current_place.0}}')
+  ]
+</script>
+
+{% else %}
+<script>
+  started_location = [
+    parseFloat('{{arked_meranti_location.long}}'),
+    parseFloat('{{arked_meranti_location.lat}}')
+  ]
+</script>
+
+{% endif %}
+
+<script>
+  let current_place = document.getElementById("current_place");
+
+  /* Render mapbox */
+
+  let map = new mapboxgl.Map({
+    container: "map",
+    style: "mapbox://style/mapbox/streets-v12",
+    center: started_location,
+    zoom: 18,
+  });
+
+  /* get user current location */
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition((position) => {
+      let lattitude = position.coords.latitude;
+      let longitude = position.coords.longitude;
+      let apiUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${lattitude}.json?access_token=${accessToken}`;
+
+      fetch(apiUrl)
+        .then((response) => response.json())
+        .then((data) => {
+          let address = data.features[0].place_name;
+          current_place.value = address;
+        });
+    });
+  }
+</script>
+
+{% if operation == 'route' %}
+<script>
+  current_place = [
+    parseFloat("{{ current_place.0 }}"),
+    parseFloat("{{ current_place.1 }}"),
+  ];
+
+  destination = [
+    parseFloat("{{ destination.0 }}"),
+    parseFloat("{{ destination.1 }}"),
+  ];
+
+  apiurl = `https://api.mapbox.com/directions/v5/mapbox/driving/${current_place[1]},${current_place[0]};${destination[1]},${destination[0]}?geometries=geojson&access_token=${accessToken}`;
+
+  fetch(apiurl)
+    .then((response) => response.json())
+    .then((data) => {
+      let route = data.routes[0].geometry;
+      console.log(route);
+      map.on("load", () => {
+        map.addLayer({
+          id: "route",
+          type: "line",
+          source: {
+            type: "geojson",
+            data: {
+              type: "Feature",
+              properties: {},
+              geometry: {
+                type: "LineString",
+                coordinates: route.coordinates,
+              },
+            },
+          },
+          layout: {
+            "line-join": "round",
+            "line-cap": "round",
+          },
+          paint: {
+            "line-color": "#3887be",
+            "line-width": 5,
+            "line-opacity": 0.8,
+          },
+        });
+      });
+    });
+</script>
+{% endif %}
