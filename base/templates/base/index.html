@@ -53,21 +53,7 @@
     return await fetchFunction(`/api/geocoding/${address}`);
   }
 </script>
-
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-{% if operation == 'route' %}
-<script>
-  current_place = [
-    parseFloat("{{ current_place.0 }}"),
-    parseFloat("{{ current_place.1 }}"),
-  ];
-=======
 <script src="{% static 'js/buttonFunction.js' %}"></script>
 <script src="{% static 'js/maps.js' %}"></script>
->>>>>>> Stashed changes
-=======
-<script src="{% static 'js/maps.js' %}"></script>
->>>>>>> main
 
 {% endblock %}

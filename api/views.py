@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpRequest
-<<<<<<< HEAD
 import geocoder
 from base.views import mapbox_access_token
 from base import models
@@ -33,21 +32,11 @@ def get_address(request: HttpRequest) -> JsonResponse:
         }
 
     return JsonResponse(result)
-=======
-from . import utility as util
-
-# Create your views here.
-
-
-def get_address(request: HttpRequest) -> JsonResponse:
-    return JsonResponse(util.setup_address_json())
->>>>>>> main
 
 
 def get_route(
         request: HttpRequest,
         bus_type: str) -> JsonResponse:
-<<<<<<< HEAD
     
     return JsonResponse(setup_route_json(bus_type))
 
@@ -60,20 +49,12 @@ def get_all_route(request: HttpRequest) -> JsonResponse:
         result[bus_type] = setup_route_json(bus_type)
 
     return JsonResponse(result)
-=======
-    return JsonResponse(util.setup_route_json(bus_type))
-
-
-def get_all_route(request: HttpRequest) -> JsonResponse:
-    return JsonResponse(util.setup_all_route_json())
->>>>>>> main
 
 
 def set_latlng_bus(
         request:HttpRequest,
         bus_name:str,
         latlng:str) -> JsonResponse:
-<<<<<<< HEAD
     
     bus_info_object = models.BusInfo.objects.get(name=bus_name)
 
@@ -89,6 +70,3 @@ def set_latlng_bus(
 def get_geocoding(request: HttpRequest, address: str) -> JsonResponse:
     coords = geocoder.mapbox(address, key=mapbox_access_token).latlng
     return JsonResponse({'coordinate': coords})
-=======
-    return util.set_latlng_bus(bus_name, latlng)
->>>>>>> main
