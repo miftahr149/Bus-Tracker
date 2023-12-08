@@ -18,7 +18,10 @@ const addMarker = (addressList, map) => {
   };
 
   createGeoJSONFeature().forEach((addressData) => {
-    new mapboxgl.Marker()
+    const divElement = document.createElement('div');
+    divElement.className = 'marker marker--bus-stop';
+    
+    new mapboxgl.Marker(divElement)
       .setLngLat(addressData.geometry.coordinates)
       .addTo(map);
   });

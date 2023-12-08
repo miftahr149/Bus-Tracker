@@ -13,6 +13,37 @@
   rel="stylesheet"
 />
 <link rel="stylesheet" href="{% static 'css/maps.css' %}" />
+<style>
+  .marker {
+    background-size: cover;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+  }
+
+  .marker--bus-stop {
+    background-image: url("{% static 'img/bus_stop.ico' %}");
+  }
+
+  .marker--bus {
+    background-image: url("{% static 'img/bus.ico' %}");
+  }
+
+  .suggestion__close-button {
+    background-image: url("{% static 'img/close.ico' %}");
+    background-size: cover;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    transition: all 1s ease-in-out;
+  }
+
+  .suggestion__close-button:hover {
+    background-image: url("{% static 'img/close_1.ico' %}");
+    background-color: white;
+  }
+</style>
 
 <main class="flex-box flex-box__grow flex-box--vertical">
   <section class="maps-routes flex-box flex-box--vertical flex-box--gap-small">
@@ -45,7 +76,26 @@
     <button type="button" class="button route__button">Find Route</button>
   </section>
 
-  <section id="map" style="flex-grow: 9"></section>
+  <section class="main-map flex-box" style="flex-grow: 9">
+    <section id="map" style="flex-grow: 7"></section>
+
+    <section
+      class="suggestion flex-box flex-box--vertical"
+      style="flex-grow: 2"
+      id="suggestion"
+    >
+      <section class="suggestion__header flex-box" style="padding: 10px 5px">
+        <button
+          type="button"
+          onclick=""
+          class="button suggestion__close-button"
+        ></button>
+
+        <h2 class="suggestion__title flex-box__grow">Route Suggestion</h2>
+      </section>
+      <section class="suggestion__content"></section>
+    </section>
+  </section>
 </main>
 
 <script>
@@ -70,11 +120,15 @@
 
   const script = document.getElementById("search-js");
   script.onload = () => {
-    mapboxsearch.autofill({ 
-      accessToken: accessToken, 
-      options: {country: 'my'} 
+    mapboxsearch.autofill({
+      accessToken: accessToken,
+      options: { country: "my" },
     });
   };
+
+  const closeSuggestion = () => {
+    const suggestionElement = document.getElementById('suggestion');
+  }
 </script>
 <script src="{% static 'js/utility.js' %}"></script>
 <script src="{% static 'js/buttonFunction.js' %}"></script>

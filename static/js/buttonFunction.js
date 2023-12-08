@@ -12,6 +12,7 @@ function submitFunctionGenerator(param) {
   const idControllerGenerator = () => {
     let counterId = 0;
     let previousRoute = [];
+    let logList = [];
     
     const addRoute = (idRouteList) => {
       idRouteList.forEach(idRoute => previousRoute.push(idRoute));
@@ -19,15 +20,21 @@ function submitFunctionGenerator(param) {
 
     const deleteRoute = () => {
       if (!previousRoute) return;
-      previousRoute.forEach((routeId) => map.removeLayer(routeId));
-      previousRoute = [];
-      console.log(`previousRoute: ${previousRoute}`);
+
+      previousRoute.forEach(idRoute => map.removeLayer(idRoute));
+      while (previousRoute.length > 0) previousRoute.shift();
+
+      console.log('successfully delete all layer');
+      console.log(`previousRoute:`);
+      console.log(previousRoute);
     };
 
     const setupRoute = async (param) => {
       const {location, id} = param;
+      const {name: locationName, coordinates: locationCoordinates} = location;
+      console.log(locationName, locationCoordinates);
       const nearestBusStop = getNearestBusStop({
-        currentPosition: location,
+        currentPosition: locationCoordinates,
         addressList: addressList
       })
 
@@ -36,20 +43,33 @@ function submitFunctionGenerator(param) {
       
       const route =  await getRoute({
         type: 'walking',
-        currentPosition: location,
+        currentPosition: locationCoordinates,
         destination: nearestBusStop.coordinates,
       })
 
       console.log('route');
       console.log(route);
 
+      previousRoute.push(id);
+      console.log('previous route');
+      console.log(previousRoute);
       addLayertoMap({id: id, route: route, map: map})
     }
+
+    const getId = () => {
+      counterId++;
+      const id = `userRoute-${counterId}`;
+      return id;
+    }
+
+    const getLog = () => logList;
 
     return {
       deleteRoute: deleteRoute,
       addRoute: addRoute,
-      setupRoute: setupRoute
+      setupRoute: setupRoute,
+      getLog: getLog,
+      getId: getId
     };
   };
 
@@ -64,13 +84,20 @@ function submitFunctionGenerator(param) {
 
     map.flyTo({ center: currentPlaceCoords, zoom: 15 });
     idController.deleteRoute();
+    
     idController.setupRoute({
-      id: 'userRoute-1',
-      location: currentPlaceCoords
+      id: idController.getId(),
+      location: {
+        name: currentPlace.value,
+        coordinates: currentPlaceCoords
+      }
     })
     idController.setupRoute({
-      id: 'userRoute-2',
-      location: destinationCoords
+      id: idController.getId(),
+      location: {
+        name: destination.value,
+        coordinates: destinationCoords
+      }
     })
   };
 }

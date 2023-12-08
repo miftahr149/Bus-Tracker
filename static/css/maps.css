@@ -28,11 +28,24 @@
     color: var(--button-background-color);
 }
 
-.map-display {
-    flex-grow: 9;
-    width: 100%;
+/* main map */
+.main-map {
+    flex-direction:column-reverse;
 }
 
+/* Route Suggestion */
+.suggestion {
+    background-color: var(--secondary-background);
+}
+
+.suggestion__header {
+    align-items: center;
+}
+
+.suggestion__title {
+    text-align: center;
+    color: var(--font-color);
+}
 
 @media only screen and (min-width:  768px) {
     .maps-routes {
@@ -41,5 +54,9 @@
 
     .route__button {
         margin: 5px 10vw;
+    }
+
+    .main-map {
+        flex-direction: row;
     }
 }

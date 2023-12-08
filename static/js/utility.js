@@ -43,7 +43,8 @@ const addLayertoMap = (param) => {
     "line-opacity": 0.8,
   };
 
-  const { id, route, map } = param;
+  const { id, route, map, source } = param;
+
   if ("layout" in param) {
     let { layout } = param;
     currentLayout = layout;
@@ -54,7 +55,7 @@ const addLayertoMap = (param) => {
     currentPaint = paint;
   }
 
-  map.addLayer({
+  let objectLayer = {
     id: id,
     type: "line",
     source: {
@@ -70,7 +71,10 @@ const addLayertoMap = (param) => {
     },
     layout: currentLayout,
     paint: currentPaint,
-  });
+  };
+
+  if (source) objectLayer.source = source;
+  map.addLayer(objectLayer);
 };
 
 const getMapboxRoute = async (param) => {
@@ -83,8 +87,8 @@ const getMapboxRoute = async (param) => {
 };
 
 const getAddressCoordinates = async (location) => {
-    const data = await fetchGeocoding(location);
-    console.log(data);
-    const [lat, long] = data.coordinate;
-    return [long, lat];
-}
+  const data = await fetchGeocoding(location);
+  console.log(data);
+  const [lat, long] = data.coordinate;
+  return [long, lat];
+};
