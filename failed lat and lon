@@ -1,0 +1,21 @@
+#include <SoftwareSerial.h>
+
+SoftwareSerial ss(4, 3);  // RX, TX
+
+void setup() {
+  Serial.begin(115200);
+  Serial.println("Testing BN220 GPS module...");
+
+  ss.begin(9600);  // Adjust this baud rate if needed for your BN220 module
+}
+
+void loop() {
+  while (ss.available() > 0) {
+    char c = ss.read();
+    Serial.print(c);  // Print raw NMEA sentences to Serial Monitor
+  }
+
+  Serial.println();  // Print a newline after processing all available characters
+
+  delay(1000);  // Pause for one second before the next iteration
+}
