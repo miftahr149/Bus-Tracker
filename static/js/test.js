@@ -35,36 +35,6 @@ const createBusStopsGeoJson = (addressList) => {
   }
 }
 
-const getNearestBusStop = (userPosition, addressList) => {
-  const setBusStop = () => {
-    result = [];
-    for (address in addressList) {
-      const [lat, long] = Object.values(addressList[address])
-      result.push({
-        name: address,
-        coordinates: [long, lat]
-      })
-    }
-    return result;
-  }
-
-  const busStopList = setBusStop();
-  let nearestBusStop = null;
-  let nearestDistance = Number.MAX_VALUE;
-  let options = {units: 'miles'};
-  
-  busStopList.forEach(busStop => {
-    const distance = turf.distance(userPosition, busStop.coordinates, options)
-
-    if (distance < nearestDistance) {
-      nearestDistance = distance;
-      nearestBusStop = busStop;
-    }
-  })
-
-  return nearestBusStop;
-}
-
 const addMarker = (geoJson, map) => {
   for (const feature of geoJson.features) {
     let marker = new mapboxgl.Marker()
@@ -75,7 +45,7 @@ const addMarker = (geoJson, map) => {
 
 async function mainFunction() {
   const address = await fetchAddress();
-  const route = await fetchAddress();
+  const busRoute = await fetchAddress();
 
   const [start_lat, start_long] = Object.values(address['Center Point UTM (CP)']);
 
@@ -86,45 +56,25 @@ async function mainFunction() {
     zoom: 18
   })
 
+  const testFunction = testFunctionGenerator({
+    addressList: address, 
+    map: map
+  });
+
   //center maps to userLocation
   if ("geolocation" in navigator) {
     const successLocation = async (position) => {
-      const userPosition = [position.coords.longitude, position.coords.latitude];
+      const {longitude, latitude} = position.coords;
+      const userPosition = [longitude, latitude];
       map.flyTo({ center: userPosition })
-      const nearestBusStop = getNearestBusStop(userPosition, address);
-      
-      const [long, lat] = nearestBusStop.coordinates;
-      url = `https://api.mapbox.com/directions/v5/mapbox/walking/${userPosition[0]},${userPosition[1]};${long},${lat}?geometries=geojson&access_token=${mapbox_access_token}`;
 
-      const response = await fetch(url);
-      const data = await response.json();
-
-      let route = data.routes[0].geometry;
-      map.on('load', () => {
-        map.addLayer({
-          id: 'route',
-          type: 'line',
-          source: {
-            type: 'geojson',
-            data: {
-              type: 'Feature',
-              properties: {},
-              geometry: {
-                type: 'LineString',
-                coordinates: route.coordinates,
-              }
-            }
-          },
-          layout: {
-            'line-join': 'round',
-            'line-cap': 'round'
-          },
-          paint: {
-            'line-color': "#3887be",
-            'line-width': 5,
-            'line-opacity': 0.8
-          }
-        })
+      map.on('load', async () => {
+        console.log(address)
+        const {lat, long} = address['Arked Meranti'];
+        await testFunction({
+          currentPosition: userPosition,
+          destination: [long, lat]
+        });
       });
     }
 

@@ -68,5 +68,7 @@ def set_latlng_bus(
     })
 
 def get_geocoding(request: HttpRequest, address: str) -> JsonResponse:
-    coords = geocoder.mapbox(address, key=mapbox_access_token).latlng
+    center_point = models.Address.objects.get(name="Center Point UTM (CP)")
+    lat, long = center_point.lat, center_point.long
+    coords = geocoder.mapbox(address, key=mapbox_access_token, proximity=[lat, long], country='my').latlng
     return JsonResponse({'coordinate': coords})

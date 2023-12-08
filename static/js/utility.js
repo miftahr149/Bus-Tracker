@@ -1,34 +1,90 @@
-const getNearestBusStop = (addressList) => {
-    const setBusStopList = () => {
-        result = [];
-        for (address in addressList) {
-            const [lat, long] = Object.values(addressList[address]);
-            result.push({
-                name: address,
-                coordinates: [long, lat]
-            })
-        }
-        return result;
+const getNearestBusStop = (param) => {
+  const { currentPosition, addressList } = param;
+
+  const setBusStopList = () => {
+    result = [];
+    for (address in addressList) {
+      const { lat, long } = addressList[address];
+      result.push({
+        name: address,
+        coordinates: [long, lat],
+      });
     }
-    
-    return (userPosition) => {
-        let nearestBusStop = null;
-        let nearestDistance = Number.MAX_VALUE;
-        const options = {units: 'miles'};
+    return result;
+  };
 
-        setBusStopList().forEach(busStop => {
-            const distance = turf.distance(
-                userPosition, 
-                busStop.coordinates,
-                options
-            );
+  const busStopList = setBusStopList();
+  let nearestBusStop = null;
+  let nearestDistance = Number.MAX_VALUE;
+  let options = { units: "miles" };
 
-            if (distance < nearestDistance) {
-                nearestDistance = distance;
-                nearestBusStop = busStop;
-            }
-        })
+  busStopList.forEach((busStop) => {
+    const { coordinates } = busStop;
+    const distance = turf.distance(currentPosition, coordinates, options);
 
-        return nearestBusStop
+    if (distance < nearestDistance) {
+      nearestDistance = distance;
+      nearestBusStop = busStop;
     }
+  });
+
+  return nearestBusStop;
+};
+
+const addLayertoMap = (param) => {
+  let currentLayout = {
+    "line-join": "round",
+    "line-cap": "round",
+  };
+
+  let currentPaint = {
+    "line-color": "#3887be",
+    "line-width": 5,
+    "line-opacity": 0.8,
+  };
+
+  const { id, route, map } = param;
+  if ("layout" in param) {
+    let { layout } = param;
+    currentLayout = layout;
+  }
+
+  if ("paint" in param) {
+    let { paint } = param;
+    currentPaint = paint;
+  }
+
+  map.addLayer({
+    id: id,
+    type: "line",
+    source: {
+      type: "geojson",
+      data: {
+        type: "Feature",
+        properties: {},
+        geometry: {
+          type: "LineString",
+          coordinates: route.coordinates,
+        },
+      },
+    },
+    layout: currentLayout,
+    paint: currentPaint,
+  });
+};
+
+const getMapboxRoute = async (param) => {
+  console.log(param);
+  const { type, currentPosition, destination } = param;
+  const url = `https://api.mapbox.com/directions/v5/mapbox/${type}/${currentPosition[0]},${currentPosition[1]};${destination[0]},${destination[1]}?geometries=geojson&access_token=${accessToken}`;
+
+  const data = await fetch(url).then((response) => response.json());
+  return data;
+};
+
+const getAddressCoordinates = async (location) => {
+    const data = await fetchGeocoding(location);
+    console.log(data);
+    const [lat, long] = data.coordinate;
+    return [long, lat];
 }

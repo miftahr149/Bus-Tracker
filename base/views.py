@@ -11,10 +11,8 @@ from . import utility
 mapbox_access_token = settings.MAPBOX_ACCESS_TOKEN
 
 def get_index_view(request: HttpRequest, addition_context: dict=None) -> HttpResponse:
-    arked_meranti = models.Address.objects.get(name="Arked Meranti")
     context = {
-        'mapbox_access_token': mapbox_access_token,
-        'arked_meranti_location': arked_meranti
+        'mapbox_access_token': mapbox_access_token
     }
     
     if addition_context:

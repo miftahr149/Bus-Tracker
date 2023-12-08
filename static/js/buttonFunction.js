@@ -1,85 +1,76 @@
-function createSubmitFunction(currentPlace, destination, map) {
-    const getGeocoding = async (address) => {
-      const response = await fetchGeocoding(address);
-      const [lat, long] = response.coordinate;
-      return [long, lat];
-    };
-  
-    const createIdFunction = () => {
-      let counterId = 0;
-      let previousRoute = [];
-  
-      const functionId = (n) => `route-${n}`;
-  
-      const createRouteId = () => {
-        counterId++;
-        const value = functionId(counterId);
-        previousRoute.push(value);
-        return value;
-      }
-  
-      const deleteRoute = () => {
-        if (!previousRoute) return;
-        previousRoute.forEach(routeId => map.removeLayer(routeId));
-      }
-  
-      return [createRouteId, deleteRoute];
-    }
-  
-    const [createRouteId, deletePreviousRoute] = createIdFunction();
-  
-    const fetchApi = async (currentPlaceCoords, destinationCoords) => {
-      let url = `https://api.mapbox.com/directions/v5/mapbox/walking/${currentPlaceCoords[0]},${currentPlaceCoords[1]};${destinationCoords[0]},${destinationCoords[1]}?geometries=geojson&access_token=${accessToken}`;
-  
-      let response = await fetch(url);
-      let data = await response.json();
-      return data;
-    };
-  
-    const addRouteToMap = (dataFetchApi) => {
-      const route = dataFetchApi.routes[0].geometry;
-      map.addLayer({
-        id: createRouteId(),
-        type: "line",
-        source: {
-          type: "geojson",
-          data: {
-            type: "Feature",
-            properties: {},
-            geometry: {
-              type: "LineString",
-              coordinates: route.coordinates,
-            },
-          },
-        },
-        layout: {
-          "line-join": "round",
-          "line-cap": "round",
-        },
-        paint: {
-          "line-color": "#3887be",
-          "line-width": 5,
-          "line-opacity": 0.8,
-        },
-      });
+function submitFunctionGenerator(param) {
+  const { currentPlace, destination, map } = param;
+  const { addressList } = param;
+
+  const getRoute = async (param) => {
+    const data = await getMapboxRoute(param);
+    console.log('apiData:')
+    console.log(data);
+    return data.routes[0].geometry;
+  }
+
+  const idControllerGenerator = () => {
+    let counterId = 0;
+    let previousRoute = [];
+    
+    const addRoute = (idRouteList) => {
+      idRouteList.forEach(idRoute => previousRoute.push(idRoute));
     }
 
-    const configureRoute = (currentPlaceCoords, destinationCoords) => {
-      if (!("geolocation" in navigator)) return;
-      navigator.geolocation.getCurrentPosition(async (position) => {
-        const coordinates = position.coords;
-        const userPosition = [coordinates.longitude, coordinates.latitude];
-      })
-    }
-  
-  
-    return async () => {
-      let currentPlaceCoords = await getGeocoding(currentPlace.value);
-      let destinationCoords = await getGeocoding(destination.value);
-      map.flyTo({ center: currentPlaceCoords, zoom: 15 });
-      deletePreviousRoute();
-      let data = await fetchApi(currentPlaceCoords, destinationCoords);
-      addRouteToMap(data);
-      configureRoute();
+    const deleteRoute = () => {
+      if (!previousRoute) return;
+      previousRoute.forEach((routeId) => map.removeLayer(routeId));
+      previousRoute = [];
+      console.log(`previousRoute: ${previousRoute}`);
     };
-  }
+
+    const setupRoute = async (param) => {
+      const {location, id} = param;
+      const nearestBusStop = getNearestBusStop({
+        currentPosition: location,
+        addressList: addressList
+      })
+
+      console.log(addressList);
+      console.log(nearestBusStop);
+      
+      const route =  await getRoute({
+        type: 'walking',
+        currentPosition: location,
+        destination: nearestBusStop.coordinates,
+      })
+
+      console.log('route');
+      console.log(route);
+
+      addLayertoMap({id: id, route: route, map: map})
+    }
+
+    return {
+      deleteRoute: deleteRoute,
+      addRoute: addRoute,
+      setupRoute: setupRoute
+    };
+  };
+
+  const idController = idControllerGenerator()
+
+  return async () => {
+    let currentPlaceCoords = await getAddressCoordinates(currentPlace.value);
+    let destinationCoords = await getAddressCoordinates(destination.value);
+
+    console.log(`currentPlace: ${currentPlaceCoords}`);
+    console.log(`destnation: ${destinationCoords}`);
+
+    map.flyTo({ center: currentPlaceCoords, zoom: 15 });
+    idController.deleteRoute();
+    idController.setupRoute({
+      id: 'userRoute-1',
+      location: currentPlaceCoords
+    })
+    idController.setupRoute({
+      id: 'userRoute-2',
+      location: destinationCoords
+    })
+  };
+}

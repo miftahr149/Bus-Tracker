@@ -24,29 +24,6 @@ const addMarker = (addressList, map) => {
   });
 };
 
-const getNearestBusStop = (addressList) => {
-  const createBusStopList = () => {
-    result = [];
-    for (address in addressList) {
-      const [latitude, longitude] = Object.values(addressList[address]);
-      result.push({
-        name: address,
-        coordinates: [longitude, latitude]
-      })
-    }
-    return result;
-  }
-
-  const busStopList = createBusStopList();
-  let nearestBusStop = null;
-  let nearesDistance = Number.MAX_VALUE;
-  let options = {units: 'miles'}
-  
-  busStopList.forEach(busStop => {
-    const distance = turd.distance(user)
-  })
-}
-
 async function mainFunction() {
   const address = await fetchAddress();
   const route = await fetchRoute();
@@ -97,7 +74,12 @@ async function mainFunction() {
   const routeButton = document.querySelector(".route__button");
   routeButton.addEventListener(
     "click",
-    createSubmitFunction(currentPlace, destination, map)
+    submitFunctionGenerator({
+      currentPlace: currentPlace,
+      destination: destination,
+      map: map,
+      addressList: address
+    })
   );
 }
 
